@@ -20,4 +20,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 5000
 
 # Run the application using Gunicorn
-CMD ["gunicorn", "-b", "0.0.0.0:5000", "ocr:app"]
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "-w", "4", "ocr:app"]
