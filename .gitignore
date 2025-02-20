@@ -12,6 +12,11 @@ __pycache__/
 ocr_env/
 
 # --------------------
+# Temporary folder
+# --------------------
+uploads/
+
+# --------------------
 # OS-specific
 # --------------------
 .DS_Store
