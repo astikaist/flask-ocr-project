@@ -7,3 +7,4 @@ tesserocr
 Pillow
 requests
 pdf2image
+imutils 
