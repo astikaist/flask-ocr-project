@@ -1,5 +1,5 @@
 import flask
-from flask import request, jsonify
+from flask import request, jsonify, render_template
 import cv2
 from skimage.filters import threshold_local, threshold_sauvola, threshold_niblack, threshold_otsu
 import numpy as np
@@ -13,9 +13,18 @@ from skimage import io
 import os
 from pdf2image import convert_from_bytes
 import requests
+from werkzeug.utils import secure_filename
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
+
+# Set upload folder
+UPLOAD_FOLDER = "uploads"
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
+# Ensure upload folder exists
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
 def content_titles_separator(image):
     im = image.copy()
@@ -166,30 +175,84 @@ def ocr_process_img(image):
     result = ocr_process(image)
     return result
 
-@app.route('/', methods=['GET'])
-def home():
-    return '''<h1>Welcome to OCR Reader for Newspaper</h1>
-<p>Try /api/reader?url=[image URL]</p>'''
+# upload image
+@app.route("/")
+def upload_page():
+    return '''
+    <!doctype html>
+    <html lang="en">
+    <head>
+        <title>Upload Image for OCR</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+                background-color: #f4f4f4;
+                padding: 20px;
+            }
+            h1 {
+                color: #333;
+            }
+            .upload-container {
+                background: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+                width: 40%;
+                margin: auto;
+            }
+            input[type="file"] {
+                margin: 10px 0;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+            input[type="submit"] {
+                background-color: #28a745;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+            input[type="submit"]:hover {
+                background-color: #218838;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="upload-container">
+            <h1>Welcome to OCR Reader for Newspaper</h1>
+            <p>Upload an image and get the extracted text.</p>
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" required>
+                <br>
+                <input type="submit" value="Upload & Process OCR">
+            </form>
+        </div>
+    </body>
+    </html>
+    '''
 
-@app.route('/api/reader', methods=['GET'])
-def api_id():
-    if 'url' in request.args:
-        url = str(request.args['url'])
-    else:
-        return "Error: No URL field provided. Please specify a URL."
+# Route to handle file upload and process OCR
+@app.route("/upload", methods=["POST"])
+def upload_file():
+    if "file" not in request.files:
+        return jsonify({"error": "No file uploaded"}), 400
 
-    try:
-        url = url.replace(" ", "%20")
-        file_ext = os.path.splitext(url)[-1]
+    file = request.files["file"]
 
-        if file_ext == ".pdf":
-            results = ocr_process_pdf(url)
-        else:
-            image = io.imread(url)
-            results = ocr_process_img(image)
-    except Exception as e:
-        print(f"Error: {e}")
-        results = "ERROR"
+    if file.filename == "":
+        return jsonify({"error": "No selected file"}), 400
+
+    filename = secure_filename(file.filename)
+    filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+    file.save(filepath)
+
+    # Read the image using OpenCV
+    image = cv2.imread(filepath)
+    results = ocr_process_img(image)
 
     return jsonify(results)
 
