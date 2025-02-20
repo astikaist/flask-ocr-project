@@ -4,8 +4,9 @@ A simple Flask application to perform OCR (Optical Character Recognition) on new
 
 ## Overview
 ### Live Demo: [Flask OCR Project](https://flask-ocr-project-production.up.railway.app)
-This project provides a REST API and a web interface to extract text from uploaded images.  
-It uses **Tesseract OCR** under the hood, along with OpenCV for image preprocessing.  
+This project provides a REST API and a web interface to extract text from uploaded images.
+It utilizes Artificial Intelligence (AI) and Machine Learning (ML) techniques, specifically Tesseract OCR, which is a machine learning-based text recognition engine.
+Additionally, Computer Vision (OpenCV, skimage) is used for image preprocessing to enhance OCR accuracy. 
 You can deploy it locally or on a server (e.g., Railway, AWS, etc.).
 
 ## Features
