@@ -1,0 +1,9 @@
+flask
+opencv-python
+scikit-image
+numpy
+rlsa
+tesserocr
+Pillow
+requests
+pdf2image
