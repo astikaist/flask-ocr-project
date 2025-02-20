@@ -1,1 +1,1 @@
-web: python ocr.py
+web: bash startup.sh
