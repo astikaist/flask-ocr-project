@@ -193,8 +193,13 @@ def api_id():
 
     return jsonify(results)
 
-#public access
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
-
-# app.run()
+    # Check if running on a cloud server (Railway)
+    is_production = os.getenv("RAILWAY_ENVIRONMENT") is not None
+    
+    if is_production:
+        # Production mode (public access)
+        app.run(host="0.0.0.0", port=5000, debug=False)
+    else:
+        # Local development mode
+        app.run(debug=True)
