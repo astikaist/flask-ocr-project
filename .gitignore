@@ -1,0 +1,29 @@
+# Created by venv; see https://docs.python.org/3/library/venv.html
+# --------------------
+# Python bytecode
+# --------------------
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --------------------
+# Virtual environment folder
+# --------------------
+ocr_env/
+
+# --------------------
+# OS-specific
+# --------------------
+.DS_Store
+
+# --------------------
+# Debug / test output
+# --------------------
+*.log
+coverage/
+*.cover
+
+# --------------------
+# PyTest cache
+# --------------------
+.pytest_cache/
