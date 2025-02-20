@@ -90,6 +90,11 @@ flask-ocr-project/
 └── images/            # Sample images for testing
 ```
 
+## Future Improvements
+- **Visual Result Page**: Instead of returning JSON, display extracted text in a formatted view.
+- **Enhanced OCR Processing**: Improve accuracy with more preprocessing techniques.
+- **User Authentication**: Allow registered users to track their OCR history.
+
 ## Contributing
 Pull requests and issue reports are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
