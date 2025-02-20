@@ -8,3 +8,4 @@ Pillow
 requests
 pdf2image
 imutils 
+gunicorn
